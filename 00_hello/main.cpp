@@ -5,7 +5,7 @@
 
 // should be simple as possible
 
-int main(int argc, char* argv[]) {
+int main() {
    std::cout << "hello world" << "\n";
    return 0;
 }
