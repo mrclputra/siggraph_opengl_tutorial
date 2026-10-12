@@ -1,0 +1,14 @@
+CompileFlags:
+  Add: [-Wall, -Wextra, -Wpedantic]
+
+Diagnostics:
+  ClangTidy:
+    Add:
+      - bugprone-*
+      - performance-*
+      # - modernize-*
+      - llvm-*
+    Remove:
+      - modernize-use-trailing-return-type
+      - llvm-include-order
+  UnusedIncludes: Strict
