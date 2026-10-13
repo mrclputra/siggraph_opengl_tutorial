@@ -47,7 +47,7 @@ int main() {
    }
    glfwMakeContextCurrent(window);
 
-   // load opengl functions, see 01_window for details
+   // load opengl functions
    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
       std::cout << "failed to load OpenGL\n";
       glfwTerminate();
