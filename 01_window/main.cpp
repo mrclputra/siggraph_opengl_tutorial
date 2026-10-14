@@ -10,12 +10,12 @@
 #include <glad/glad.h>
 
 // this function is called by GLFW whenever something goes wrong
-void glfw_error_callback(int error, const char *description) {
+void errorCallback(int error, const char *description) {
    std::cout << "glfw error " << error << ": " << description << "\n";
 }
 
 // this function is called by GLFW whenever the window is resized
-void glfw_framebuffer_size_callback(GLFWwindow *, int width, int height) {
+void framebufferSizeCallback(GLFWwindow *, int width, int height) {
    // tell opengl to resize the viewport accordingly
    glViewport(0, 0, width, height);
 }
@@ -24,7 +24,7 @@ int main() {
    std::cout << "01 GLFW Window Example" << "\n";
 
    // set the glfw error callback
-   glfwSetErrorCallback(glfw_error_callback);
+   glfwSetErrorCallback(errorCallback);
 
    // initialize GLFW
    if (!glfwInit()) {
@@ -70,7 +70,7 @@ int main() {
    }
 
    // set callback for window resizing
-   glfwSetFramebufferSizeCallback(window, glfw_framebuffer_size_callback);
+   glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 
    // main loop, runs once every frame until the window is closed
    while (!glfwWindowShouldClose(window)) {

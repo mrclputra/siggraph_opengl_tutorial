@@ -20,4 +20,7 @@ foreach(dir ${children})
 
    add_executable(${name} ${sources})
    target_link_libraries(${name} glad::glad glfw glm::glm)
+
+   # full path to this folder, so shaders and other files can be found no matter where the exe runs from
+   target_compile_definitions(${name} PRIVATE SHADER_DIR="${dir}/")
 endforeach()

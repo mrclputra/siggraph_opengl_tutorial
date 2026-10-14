@@ -4,22 +4,22 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
-void glfw_error_callback(int error, const char *description) {
+void errorCallback(int error, const char *description) {
    std::cout << "glfw error " << error << ": " << description << "\n";
 }
-void glfw_framebuffer_size_callback(GLFWwindow *, int width, int height) {
+void framebufferSizeCallback(GLFWwindow *, int width, int height) {
    glViewport(0, 0, width, height);
 }
 
 // polling: we call this ourselves every frame to check the current state of the mouse
-void glfw_poll_mouse(GLFWwindow *window) {
+void pollMouse(GLFWwindow *window) {
    double x, y;
    glfwGetCursorPos(window, &x, &y);  // in pixels, from the top left of the window
    // std::cout << "mouse: " << x << ", " << y << "\n";
 }
 
 // callback: glfw calls this once whenever a key is pressed, held or released
-void glfw_key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
    if (action != GLFW_PRESS) return;  // only react to the initial press
    if (key == GLFW_KEY_ESCAPE) glfwSetWindowShouldClose(window, true);
    if (key == GLFW_KEY_SPACE) std::cout << "space pressed" << "\n";
@@ -28,7 +28,7 @@ void glfw_key_callback(GLFWwindow *window, int key, int scancode, int action, in
 int main() {
    std::cout << "02 GLFW Input Example" << "\n";
 
-   glfwSetErrorCallback(glfw_error_callback);
+   glfwSetErrorCallback(errorCallback);
 
    if (!glfwInit()) {
       return 1;  // fail
@@ -54,12 +54,12 @@ int main() {
       return 1;
    }
 
-   glfwSetFramebufferSizeCallback(window, glfw_framebuffer_size_callback);
-   glfwSetKeyCallback(window, glfw_key_callback);
+   glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
+   glfwSetKeyCallback(window, keyCallback);
 
    // main loop
    while (!glfwWindowShouldClose(window)) {
-      glfw_poll_mouse(window);
+      pollMouse(window);
 
       glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT);

@@ -4,7 +4,7 @@ set -e
 BUILD_DIR="build"
 VCPKG_PATH="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
 # TARGET_NAME="${1:-00_hello}"
-TARGET_NAME="${1:-03_triangle}"
+TARGET_NAME="${1:-04_shader}"
 
 # rm -rf "$BUILD_DIR"
 
