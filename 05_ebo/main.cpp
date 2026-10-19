@@ -38,8 +38,8 @@ int main() {
    //
    // without an ebo we would need 6 vertices, with 0 and 2 stored twice
    // with an ebo we store each corner once, and the indices say which corners make each triangle
-   //    when we draw, we dont iterate over the vao anymore, but rather the ebo
-   //    the gpu reads the indices 3 at a time and looks up the vertex with that number
+   //    when we draw, we will now iterate over the element buffer and not the vertex array
+   //    because of this, the gpu knows that 3 consecutive indices make a triangle
    //    see how vertex 0 and 2 are shared?
    unsigned int indices[] = {
       0, 1, 2,  // first triangle
