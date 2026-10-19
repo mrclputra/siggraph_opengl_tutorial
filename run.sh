@@ -3,8 +3,7 @@ set -e
 
 BUILD_DIR="build"
 VCPKG_PATH="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
-# TARGET_NAME="${1:-00_hello}"
-TARGET_NAME="${1:-07_loader}"
+TARGET_NAME="${1:-00_hello}"
 
 # rm -rf "$BUILD_DIR"
 

@@ -4,10 +4,14 @@
 layout(location = 0) in vec3 vpos;
 layout(location = 1) in vec3 vcolor;
 
+uniform float time;
+
 out vec3 acolor;
 
 // runs once for every vertex
 void main() {
-   gl_Position = vec4(vpos, 1.0);  // built-in output, the final position of this vertex
-   acolor = vcolor;
+   // gl_Position is a built-in output, there are many like this
+   //    but this is required
+   gl_Position = vec4(vpos + vec3(sin(time), 0.0, 0.0), 1.0);
+   acolor = vcolor; // pass the color on to the fragment shader
 }
