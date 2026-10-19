@@ -1,5 +1,7 @@
 #version 330 core
 
+in vec3 acolor;
+
 // output, the color of this pixel
 out vec4 color;
 
@@ -8,6 +10,6 @@ uniform float time;
 
 // runs once for every pixel the triangle covers
 void main() {
-   float red = sin(time) * 0.5 + 0.5;  // sin goes from -1 to 1, this maps it to 0 to 1
-   color = vec4(red, 0.5, 0.2, 1.0);   // r, g, b, a
+   float brightness = sin(time) * 0.5 + 0.5;  // sin goes from -1 to 1, this maps it to 0 to 1
+   color = vec4(acolor * brightness, 1.0);    // r, g, b, a
 }
