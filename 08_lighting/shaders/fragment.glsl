@@ -1,6 +1,5 @@
 #version 330 core
 in vec3 apos;
-in vec3 acolor;
 in vec3 anormal;
 out vec4 color;
 
@@ -8,7 +7,7 @@ uniform vec3 light_pos;
 uniform vec3 view_pos;
 
 void main() {
-   vec3 object_color = acolor; // color of the object, from the vertices
+   vec3 object_color = vec3(1.0, 1.0, 1.0); // color of the object, white
    vec3 light_color = vec3(1.0, 0.95, 0.85); // color of the light
 
    // the normal gets blended between the vertices,

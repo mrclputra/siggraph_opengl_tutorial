@@ -8,11 +8,10 @@
 
 #include <glm/glm.hpp>
 
-// one vertex, laid out in memory exactly like the 6 floats we used before
-//    pos is x y z, color is r g b
+// one vertex, for now just the position x y z
+//    colors in obj files belong to materials (a separate .mtl file), which we skip, so the color is set in the shader instead
 struct Vertex {
    glm::vec3 pos;
-   glm::vec3 color;
 };
 
 // reads an obj file into our own format, which we can then upload to the gpu
@@ -34,12 +33,6 @@ bool loadObj(const std::string &path, std::vector<Vertex> &vertices, std::vector
       if (type == "v") {
          Vertex vertex;
          ss >> vertex.pos.x >> vertex.pos.y >> vertex.pos.z;
-
-         // "v x y z r g b", the color after the position isn't in the original obj spec,
-         //    but most programs can write it
-         //    if the file has no colors, use white
-         if (!(ss >> vertex.color.r >> vertex.color.g >> vertex.color.b))
-            vertex.color = glm::vec3(1.0f);
          vertices.push_back(vertex);
       } else if (type == "f") {
          // faces can look like "f 1 2 3" or "f 1/1/1 2/2/2 3/3/3", we only want the first number of each

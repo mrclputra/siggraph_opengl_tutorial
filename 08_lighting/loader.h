@@ -11,7 +11,6 @@
 // same as 07_loader, plus the normal, the direction the surface is facing at this vertex
 struct Vertex {
    glm::vec3 pos;
-   glm::vec3 color;
    glm::vec3 normal;
 };
 
@@ -35,9 +34,6 @@ bool loadObj(const std::string &path, std::vector<Vertex> &vertices, std::vector
       if (type == "v") {
          Vertex vertex;
          ss >> vertex.pos.x >> vertex.pos.y >> vertex.pos.z;
-         // read the color like 07, but the dragon has none, so fall back to white
-         if (!(ss >> vertex.color.r >> vertex.color.g >> vertex.color.b))
-            vertex.color = glm::vec3(1.0f);
          vertex.normal = glm::vec3(0.0f);
          vertices.push_back(vertex);
       } else if (type == "vn") {

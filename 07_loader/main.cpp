@@ -54,8 +54,6 @@ int main() {
 
    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, pos));
    glEnableVertexAttribArray(0);
-   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, color));
-   glEnableVertexAttribArray(1);
 
    while (!glfwWindowShouldClose(window)) {
       glClearColor(0.17f, 0.22f, 0.24f, 1.0f);

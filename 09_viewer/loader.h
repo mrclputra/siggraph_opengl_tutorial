@@ -11,15 +11,14 @@
 
 struct Vertex {
    glm::vec3 pos;
-   glm::vec3 color;
    glm::vec3 normal;
 };
 
 // reads an obj file, a more complete version of 08_lighting
-//    positions "v x y z", optionally followed by a color "v x y z r g b" (some programs export this)
+//    positions "v x y z"
 //    normals "vn x y z"
 //    faces "f" with any number of corners, each corner can be "1", "1/2", "1//3" or "1/2/3"
-//    texture coordinates and materials get skipped
+//    texture coordinates and materials (colors) get skipped
 bool loadObj(const std::string &path, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices) {
    std::ifstream file(path);
    if (!file) {
@@ -28,7 +27,6 @@ bool loadObj(const std::string &path, std::vector<Vertex> &vertices, std::vector
    }
 
    std::vector<glm::vec3> positions;
-   std::vector<glm::vec3> colors;
    std::vector<glm::vec3> normals;
 
    // in an obj a corner can pair any position with any normal, but opengl wants one index per vertex
@@ -46,12 +44,6 @@ bool loadObj(const std::string &path, std::vector<Vertex> &vertices, std::vector
          glm::vec3 pos;
          ss >> pos.x >> pos.y >> pos.z;
          positions.push_back(pos);
-
-         glm::vec3 color(1.0f, 1.0f, 1.0f);  // default color if the file has none
-         glm::vec3 file_color;
-         if (ss >> file_color.r >> file_color.g >> file_color.b)
-            color = file_color;
-         colors.push_back(color);
       } else if (type == "vn") {
          glm::vec3 normal;
          ss >> normal.x >> normal.y >> normal.z;
@@ -73,7 +65,6 @@ bool loadObj(const std::string &path, std::vector<Vertex> &vertices, std::vector
             if (!seen.contains(key)) {
                Vertex vertex;
                vertex.pos = positions[p];
-               vertex.color = colors[p];
                vertex.normal = glm::vec3(0.0f);
                if (n >= 0)
                   vertex.normal = normals[n];

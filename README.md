@@ -24,7 +24,7 @@ This builds and runs the chapter with that folder name. Dependencies (glfw, glad
 - `06_transforms` - model, view and projection matrices
 - `07_loader` - advanced model loading
 - `08_lighting` - advanced shaders and normals attribute
-- `09_viewer` - everything together, orbit camera, mouse controls, window resizing, and an obj loader that handles any mesh
+- `09_viewer` - everything all together
 
 ## Resources
 
