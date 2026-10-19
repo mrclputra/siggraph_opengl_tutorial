@@ -61,7 +61,7 @@ int main() {
    while (!glfwWindowShouldClose(window)) {
       pollMouse(window);
 
-      glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+      glClearColor(0.16f, 0.21f, 0.14f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT);
 
       glfwSwapBuffers(window);

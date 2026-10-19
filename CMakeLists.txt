@@ -21,6 +21,11 @@ foreach(dir ${children})
    add_executable(${name} ${sources})
    target_link_libraries(${name} glad::glad glfw glm::glm)
 
-   # full path to this folder, so shaders and other files can be found no matter where the exe runs from
+   # full path to this folder,
+   # so shaders and other files can be found no matter where the exe runs from
    target_compile_definitions(${name} PRIVATE SHADER_DIR="${dir}/")
+
+   # bake the c++ standard library into the exe,
+   # otherwise it might load a different libstdc++-6.dll from PATH and crash
+   # please dont ask marcel about this he wont know :) target_link_options(${name} PRIVATE -static-libstdc++ -static-libgcc)
 endforeach()

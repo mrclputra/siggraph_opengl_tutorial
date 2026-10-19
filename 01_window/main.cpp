@@ -75,7 +75,8 @@ int main() {
    // main loop, runs once every frame until the window is closed
    while (!glfwWindowShouldClose(window)) {
       // clear the screen to a color
-      glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+      //    opengl wants colors from 0 to 1, so this is (41, 54, 35) divided by 255
+      glClearColor(0.16f, 0.21f, 0.14f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT);
 
       glfwSwapBuffers(window);  // show what we drew

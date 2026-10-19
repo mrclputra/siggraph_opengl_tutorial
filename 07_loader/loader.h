@@ -1,0 +1,53 @@
+#pragma once
+
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
+
+#include <glm/glm.hpp>
+
+// one vertex, laid out in memory exactly like the 6 floats we used before
+//    pos is x y z, color is r g b
+struct Vertex {
+   glm::vec3 pos;
+   glm::vec3 color;
+};
+
+// reads an obj file into our own format, which we can then upload to the gpu
+//    obj is just a text file, so we go through it line by line and look at the first word
+//    we only read positions ("v") and triangles ("f"), everything else (normals, texture coords, materials) gets skipped for now
+bool loadObj(const std::string &path, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices) {
+   std::ifstream file(path);
+   if (!file) {
+      std::cout << "error, could not open file " << path << "\n";
+      return false;
+   }
+
+   std::string line;
+   while (std::getline(file, line)) {
+      std::stringstream ss(line);
+      std::string type;
+      ss >> type;
+
+      if (type == "v") {
+         Vertex vertex;
+         ss >> vertex.pos.x >> vertex.pos.y >> vertex.pos.z;
+         vertex.color = vertex.pos + 0.5f;  // obj has no colors, so we make one from the position, -0.5..0.5 becomes 0..1
+         vertices.push_back(vertex);
+      } else if (type == "f") {
+         // faces can look like "f 1 2 3" or "f 1/1/1 2/2/2 3/3/3", we only want the first number of each
+         //    std::stoi stops reading at the '/', so it handles both
+         //    this only works for triangles, faces with 4 or more corners would need to be split up
+         for (int i = 0; i < 3; i++) {
+            std::string corner;
+            ss >> corner;
+            indices.push_back(std::stoi(corner) - 1);  // obj counts from 1, opengl from 0
+         }
+      }
+   }
+
+   std::cout << "loaded " << path << ": " << vertices.size() << " vertices, " << indices.size() / 3 << " triangles\n";
+   return true;
+}

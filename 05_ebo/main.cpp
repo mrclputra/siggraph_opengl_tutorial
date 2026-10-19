@@ -14,7 +14,7 @@ int main() {
    glfwMakeContextCurrent(window);
    gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
-   Shader shader(SHADER_DIR "shader.vert", SHADER_DIR "shader.frag");
+   Shader shader(SHADER_DIR "shaders/vertex.glsl", SHADER_DIR "shaders/fragment.glsl");
 
    // notice how we only have 4 vertices
    // clang-format off
@@ -68,7 +68,7 @@ int main() {
    glEnableVertexAttribArray(1);
 
    while (!glfwWindowShouldClose(window)) {
-      glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+      glClearColor(0.16f, 0.21f, 0.14f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT);
 
       shader.bind();

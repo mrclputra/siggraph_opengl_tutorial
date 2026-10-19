@@ -16,7 +16,7 @@ int main() {
 
    // SHADER_DIR is set by cmake to this folder, so the files are found from anywhere
    //    otherwise you would probably want to somehow set the path to the shader here
-   Shader shader(SHADER_DIR "shader.vert", SHADER_DIR "shader.frag");
+   Shader shader(SHADER_DIR "shaders/vertex.glsl", SHADER_DIR "shaders/fragment.glsl");
 
    // clang-format off
    float vertices[] = {
@@ -40,7 +40,7 @@ int main() {
    glEnableVertexAttribArray(1);
 
    while (!glfwWindowShouldClose(window)) {
-      glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+      glClearColor(0.16f, 0.21f, 0.14f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT);
 
       shader.bind();
