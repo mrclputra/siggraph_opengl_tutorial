@@ -27,5 +27,11 @@ foreach(dir ${children})
 
    # bake the c++ standard library into the exe,
    # otherwise it might load a different libstdc++-6.dll from PATH and crash
-   # please dont ask marcel about this he wont know :) target_link_options(${name} PRIVATE -static-libstdc++ -static-libgcc)
+   # please dont ask marcel about this he woudlnt know :)
+   target_link_options(${name} PRIVATE -static-libstdc++ -static-libgcc)
+
+   # std::println needs these with mingw: stdc++exp has the windows console part of <print>,
+   # and lld links it without a wall of "duplicate section" warnings
+   target_link_libraries(${name} stdc++exp)
+   target_link_options(${name} PRIVATE -fuse-ld=lld)
 endforeach()

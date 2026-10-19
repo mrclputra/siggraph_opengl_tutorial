@@ -68,7 +68,7 @@ int main() {
    glEnableVertexAttribArray(1);
 
    while (!glfwWindowShouldClose(window)) {
-      glClearColor(0.16f, 0.21f, 0.14f, 1.0f);
+      glClearColor(0.17f, 0.22f, 0.24f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT);
 
       shader.bind();

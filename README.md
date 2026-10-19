@@ -4,7 +4,7 @@ Code for the Introduction to Graphics with OpenGL session. Each folder is its ow
 
 ## Build
 
-Requires CMake, Ninja, clang and vcpkg (with `VCPKG_ROOT` set). `run.sh` is set up for Windows with MSYS2 clang, change the compiler and triplet in it for other setups.
+Requires CMake, Ninja, clang (with lld) and vcpkg (with `VCPKG_ROOT` set), and a compiler new enough for C++23 `std::println`. `run.sh` and the linker flags in `CMakeLists.txt` are set up for Windows with MSYS2 clang, change them for other setups.
 
 ```bash
 ./run.sh

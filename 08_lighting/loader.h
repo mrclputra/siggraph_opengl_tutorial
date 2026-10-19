@@ -1,6 +1,6 @@
 #pragma once
 
-#include <iostream>
+#include <print>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -8,9 +8,10 @@
 
 #include <glm/glm.hpp>
 
-// color is replaced by the normal, the direction the surface is facing at this vertex
+// same as 07_loader, plus the normal, the direction the surface is facing at this vertex
 struct Vertex {
    glm::vec3 pos;
+   glm::vec3 color;
    glm::vec3 normal;
 };
 
@@ -18,7 +19,7 @@ struct Vertex {
 bool loadObj(const std::string &path, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices) {
    std::ifstream file(path);
    if (!file) {
-      std::cout << "error, could not open file " << path << "\n";
+      std::println("error, could not open file {}", path);
       return false;
    }
 
@@ -34,6 +35,9 @@ bool loadObj(const std::string &path, std::vector<Vertex> &vertices, std::vector
       if (type == "v") {
          Vertex vertex;
          ss >> vertex.pos.x >> vertex.pos.y >> vertex.pos.z;
+         // read the color like 07, but the dragon has none, so fall back to white
+         if (!(ss >> vertex.color.r >> vertex.color.g >> vertex.color.b))
+            vertex.color = glm::vec3(1.0f);
          vertex.normal = glm::vec3(0.0f);
          vertices.push_back(vertex);
       } else if (type == "vn") {
@@ -58,6 +62,6 @@ bool loadObj(const std::string &path, std::vector<Vertex> &vertices, std::vector
       }
    }
 
-   std::cout << "loaded " << path << ": " << vertices.size() << " vertices, " << indices.size() / 3 << " triangles\n";
+   std::println("loaded {}: {} vertices, {} triangles", path, vertices.size(), indices.size() / 3);
    return true;
 }

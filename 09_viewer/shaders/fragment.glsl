@@ -1,7 +1,7 @@
 #version 330 core
 in vec3 apos;
-in vec3 anormal;
 in vec3 acolor;
+in vec3 anormal;
 out vec4 color;
 
 uniform vec3 light_pos;

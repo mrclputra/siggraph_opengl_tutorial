@@ -51,7 +51,7 @@ int main() {
    glEnableVertexAttribArray(1);
 
    while (!glfwWindowShouldClose(window)) {
-      glClearColor(0.16f, 0.21f, 0.14f, 1.0f);
+      glClearColor(0.17f, 0.22f, 0.24f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT);
 
       shader.bind();
@@ -61,8 +61,8 @@ int main() {
 
       // this is the model matrix
       //    where the object is in the "world"
-      //    here i spin it over time around an axis
-      glm::mat4 model = glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
+      //    here i spin it over time (from glfw) around an axis
+      glm::mat4 model = glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(), glm::vec3(1.0f, 0.0f, 0.0f));
 
       // this is the view matrix
       //    where the camera is (how the object is positioned relative to the camera)

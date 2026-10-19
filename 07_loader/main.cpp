@@ -9,6 +9,12 @@
 #include "shader.h"
 #include "loader.h"
 
+// obj files come from Wavefront Technologies in the late 80s for their animation software
+//    they later merged with Alias in 1995 and went on to make Maya
+// the format is just plain text, positions, normals, texture coords and faces, one per line
+//    materials live in a separate .mtl file, which we will skip here
+// it's old but very simple, open cube.obj in a text editor to see
+
 int main() {
    glfwInit();
    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -52,7 +58,7 @@ int main() {
    glEnableVertexAttribArray(1);
 
    while (!glfwWindowShouldClose(window)) {
-      glClearColor(0.16f, 0.21f, 0.14f, 1.0f);
+      glClearColor(0.17f, 0.22f, 0.24f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear the depth buffer too, every frame
 
       shader.bind();

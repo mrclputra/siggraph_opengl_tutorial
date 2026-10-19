@@ -1,5 +1,3 @@
-#include <iostream>
-
 #define GLFW_INCLUDE_NONE
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -17,7 +15,8 @@ const char *fragment_src = R"(
   #version 330 core
   out vec4 color;
   void main() {
-     color = vec4(1.0, 0.5, 0.2, 1.0);
+     // color = vec4(1.0, 0.5, 0.2, 1.0);
+     color = vec4(1.0, 1.0, 1.0, 1.0)
   }
   )";
 
@@ -99,7 +98,7 @@ int main() {
 
    // main loop
    while (!glfwWindowShouldClose(window)) {
-      glClearColor(0.16f, 0.21f, 0.14f, 1.0f);
+      glClearColor(0.17f, 0.22f, 0.24f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT);
 
       glUseProgram(program);

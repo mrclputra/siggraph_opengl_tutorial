@@ -1,4 +1,4 @@
-#include <iostream>
+#include <print>
 
 // glfw is our windowing library, it creates the window + opengl context, and can handle input
 //    it does not draw anything, which is what opengl is for
@@ -11,7 +11,7 @@
 
 // this function is called by GLFW whenever something goes wrong
 void errorCallback(int error, const char *description) {
-   std::cout << "glfw error " << error << ": " << description << "\n";
+   std::println("glfw error {}: {}", error, description);
 }
 
 // this function is called by GLFW whenever the window is resized
@@ -21,7 +21,7 @@ void framebufferSizeCallback(GLFWwindow *, int width, int height) {
 }
 
 int main() {
-   std::cout << "01 GLFW Window Example" << "\n";
+   std::println("01 GLFW Window Example");
 
    // set the glfw error callback
    glfwSetErrorCallback(errorCallback);
@@ -64,7 +64,7 @@ int main() {
    // note that all this must happen after glfwMakeContextCurrent;
    // without a current context, there is nothing to load from.
    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-      std::cout << "failed to load OpenGL\n";
+      std::println("failed to load OpenGL");
       glfwTerminate();
       return 1;
    }
@@ -75,8 +75,8 @@ int main() {
    // main loop, runs once every frame until the window is closed
    while (!glfwWindowShouldClose(window)) {
       // clear the screen to a color
-      //    opengl wants colors from 0 to 1, so this is (41, 54, 35) divided by 255
-      glClearColor(0.16f, 0.21f, 0.14f, 1.0f);
+      //    opengl wants colors from 0 to 1, so this is (44, 56, 61) divided by 255
+      glClearColor(0.17f, 0.22f, 0.24f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT);
 
       glfwSwapBuffers(window);  // show what we drew

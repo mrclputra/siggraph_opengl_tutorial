@@ -1,6 +1,6 @@
 #pragma once
 
-#include <iostream>
+#include <print>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -31,11 +31,11 @@ class Shader {
       if (!ok) {
          GLchar info_log[1024];
          glGetProgramInfoLog(program, 1024, nullptr, info_log);
-         std::cout << "SHADER_LINK_ERROR: " << info_log << "\n";
+         std::println("SHADER_LINK_ERROR: {}", info_log);
          glDeleteProgram(program);
          program = 0;  // 0 means "no program", binding it just draws nothing
       } else {
-         std::cout << "linked shader program " << program << "\n";
+         std::println("linked shader program {}", program);
       }
 
       // since we already have the program, we dont need these anymore
@@ -93,18 +93,18 @@ class Shader {
       if (!ok) {
          GLchar info_log[1024];
          glGetShaderInfoLog(shader, 1024, nullptr, info_log);
-         std::cout << "SHADER_COMPILE_ERROR: " << info_log << "\n";
+         std::println("SHADER_COMPILE_ERROR: {}", info_log);
          glDeleteShader(shader);
          return 0;
       }
-      std::cout << "compile shader source: " << shader << "\n";
+      std::println("compile shader source: {}", shader);
       return shader;
    }
 
    // read the whole file into a string
    static std::string readFile(const std::string &path) {
       std::ifstream file(path);
-      if (!file) std::cout << "error, could not open file " << path << "\n";
+      if (!file) std::println("error, could not open file {}", path);
       std::stringstream ss;
       ss << file.rdbuf();
       return ss.str();
