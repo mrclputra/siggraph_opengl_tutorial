@@ -12,7 +12,6 @@
 #include "camera.h"
 #include "input.h"
 
-// called by glfw whenever the window is resized, see 01_window
 void framebufferSizeCallback(GLFWwindow *, int width, int height) {
    glViewport(0, 0, width, height);
 }
@@ -40,7 +39,6 @@ int main() {
       return 1;
    }
 
-   // initialize buffers
    unsigned int vao, vbo, ebo;
    glGenVertexArrays(1, &vao);
    glGenBuffers(1, &vbo);
@@ -60,8 +58,7 @@ int main() {
 
    Input input(window);
 
-   // find the box around the model, so the camera can start looking at the middle of it from far enough away
-   //    models can be any size and anywhere, so we can't just hardcode the camera like before
+   // compute bounding box so the camera starts looking at the center from a reasonable distance
    glm::vec3 bbox_min = vertices[0].pos;
    glm::vec3 bbox_max = vertices[0].pos;
    for (const Vertex &vertex : vertices) {
@@ -72,14 +69,13 @@ int main() {
    camera.frame((bbox_min + bbox_max) * 0.5f, glm::length(bbox_max - bbox_min) * 0.5f);
 
    while (!glfwWindowShouldClose(window)) {
-      // the window can be resized now, so we ask for its size every frame instead of using 1280x720
-      //    a minimized window is 0 pixels high, std::max keeps us from dividing by 0 in the projection
+      // window can be resized now, ask for size every frame
+      // std::max prevents dividing by 0 when minimized
       int width, height;
       glfwGetFramebufferSize(window, &width, &height);
       height = std::max(height, 1);
 
-      // controls
-      //    left mouse to orbit, middle mouse to pan, scroll to zoom, escape to quit
+      // controls: left mouse = orbit, middle = pan, scroll = zoom, escape = quit
       if (input.isKeyDown(GLFW_KEY_ESCAPE))
          glfwSetWindowShouldClose(window, true);
       if (input.isMouseDown(GLFW_MOUSE_BUTTON_LEFT)) {
@@ -98,12 +94,12 @@ int main() {
 
       shader.bind();
 
-      // the model stays still now, the camera moves instead
+      // model stays still, camera moves
       shader.setMat4("model", glm::mat4(1.0f));
       shader.setMat4("view", camera.getViewMatrix());
       shader.setMat4("projection", camera.getProjMatrix(width, height));
 
-      // the light sits on the camera like a headlight, so whatever we look at is lit
+      // light sits on the camera like a headlight
       shader.setVec3("light_pos", camera.position);
       shader.setVec3("view_pos", camera.position);
 

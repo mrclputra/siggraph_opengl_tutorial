@@ -16,7 +16,7 @@ int main() {
 
    Shader shader(SHADER_DIR "shaders/vertex.glsl", SHADER_DIR "shaders/fragment.glsl");
 
-   // notice how we only have 4 vertices
+   // notice we only have 4 vertices for a quad
    // clang-format off
    float vertices[] = {
    //  x      y      z      r     g     b
@@ -26,8 +26,6 @@ int main() {
       -0.5f,  0.5f,  0.0f,  1.0f, 1.0f, 0.0f,  // 3 top left
    };
 
-   // a quad is 2 triangles, and they share the corners 0 and 2
-   //
    //   3 ---------- 2
    //   |          / |
    //   |  2nd   /   |
@@ -36,18 +34,14 @@ int main() {
    //   |  /         |
    //   0 ---------- 1
    //
-   // without an ebo we would need 6 vertices, with 0 and 2 stored twice
-   // with an ebo we store each corner once, and the indices say which corners make each triangle
-   //    when we draw, we will now iterate over the element buffer and not the vertex array
-   //    because of this, the gpu knows that 3 consecutive indices make a triangle
-   //    see how vertex 0 and 2 are shared?
+   // without an ebo we'd need 6 vertices with 0 and 2 stored twice
+   // with an ebo we store each corner once, indices say which corners make each triangle
    unsigned int indices[] = {
       0, 1, 2,  // first triangle
       2, 3, 0,  // second triangle
    };
    // clang-format on
 
-   // initialize buffers
    unsigned int vao, vbo, ebo;
    glGenVertexArrays(1, &vao);
    glGenBuffers(1, &vbo);
@@ -57,8 +51,7 @@ int main() {
    glBindBuffer(GL_ARRAY_BUFFER, vbo);
    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-   // the vao also remembers the ebo,
-   //    bind it while the vao is bound
+   // bind the ebo while the vao is bound so the vao remembers it
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
@@ -73,8 +66,7 @@ int main() {
 
       shader.bind();
 
-      // draw using ebo, instead of going through vertices in order
-      // 6 indices, of type unsigned int
+      // draw using ebo -- 6 indices, gpu iterates those instead of the vertex array
       glBindVertexArray(vao);
       glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

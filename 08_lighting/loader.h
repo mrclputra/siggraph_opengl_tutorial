@@ -8,13 +8,12 @@
 
 #include <glm/glm.hpp>
 
-// same as 07_loader, plus the normal, the direction the surface is facing at this vertex
 struct Vertex {
    glm::vec3 pos;
-   glm::vec3 normal;
+   glm::vec3 normal;  // direction the surface faces at this vertex
 };
 
-// same as 07_loader, but now we also read the normals ("vn")
+// same as 07_loader but also reads normals ("vn")
 bool loadObj(const std::string &path, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices) {
    std::ifstream file(path);
    if (!file) {
@@ -22,7 +21,7 @@ bool loadObj(const std::string &path, std::vector<Vertex> &vertices, std::vector
       return false;
    }
 
-   // normals are listed separately in the file, the faces say which normal goes with which vertex
+   // normals are listed separately in the file; the faces say which normal belongs to which vertex
    std::vector<glm::vec3> normals;
 
    std::string line;
@@ -47,9 +46,7 @@ bool loadObj(const std::string &path, std::vector<Vertex> &vertices, std::vector
             unsigned int index = std::stoi(corner) - 1;
             indices.push_back(index);
 
-            // corners look like "1//1" or "1/1/1", the normal index is the number after the last slash
-            //    this assumes every vertex only has one normal, which is true for smooth meshes like the dragon
-            //    something with sharp edges like a cube would need its corners duplicated, one per normal
+            // corners look like "1//1" or "1/2/3", normal index is after the last slash
             size_t slash = corner.rfind('/');
             if (slash != std::string::npos && corner.find('/') != slash) {
                vertices[index].normal = normals[std::stoi(corner.substr(slash + 1)) - 1];

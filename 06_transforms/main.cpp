@@ -32,7 +32,6 @@ int main() {
    };
    // clang-format on
 
-   // initialize buffers
    unsigned int vao, vbo, ebo;
    glGenVertexArrays(1, &vao);
    glGenBuffers(1, &vbo);
@@ -56,22 +55,11 @@ int main() {
 
       shader.bind();
 
-      // most people use a system of 3 matrices for putting vertices on a screen
-      //    glm::mat4(1.0f) is an identity matrix, a matrix that does nothing, we will build on top of it
-
-      // this is the model matrix
-      //    where the object is in the "world"
-      //    here i spin it over time (from glfw) around an axis
+      // model: where the object is in the world (spinning over time)
       glm::mat4 model = glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(), glm::vec3(1.0f, 0.0f, 0.0f));
-
-      // this is the view matrix
-      //    where the camera is (how the object is positioned relative to the camera)
-      //    remember the right-hand-y-up rule!
+      // view: where the camera is (moves the whole world relative to the camera)
       glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -2.0f));
-
-      // this is the projection matrix
-      //    defines where stuff goes on the screen
-      //    requires an fov, screen dimensions, and a near/far plane
+      // projection: fov, aspect ratio, near/far planes
       glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1280.0f / 720.0f, 0.1f, 100.0f);
 
       shader.setMat4("model", model);

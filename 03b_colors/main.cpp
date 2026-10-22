@@ -5,9 +5,9 @@
 const char *vertex_src = R"(
   #version 330 core
   layout (location = 0) in vec3 vpos;
-  layout (location = 1) in vec3 vcolor;  // new, the second attribute
+  layout (location = 1) in vec3 vcolor;  // new, second attribute
 
-  out vec3 acolor;  // sent to the fragment shader, the name has to match the in there
+  out vec3 acolor;  // sent to fragment shader, name has to match
 
   void main() {
      gl_Position = vec4(vpos, 1.0);
@@ -17,7 +17,7 @@ const char *vertex_src = R"(
 
 const char *fragment_src = R"(
   #version 330 core
-  in vec3 acolor;  // from the vertex shader, blended between the 3 vertices for every pixel
+  in vec3 acolor;  // interpolated across the triangle for each pixel
   out vec4 color;
 
   void main() {
@@ -35,7 +35,6 @@ int main() {
    glfwMakeContextCurrent(window);
    gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
-   // compile shaders and link into a single program
    unsigned int vertex_shader = glCreateShader(GL_VERTEX_SHADER);
    glShaderSource(vertex_shader, 1, &vertex_src, nullptr);
    glCompileShader(vertex_shader);
@@ -49,7 +48,7 @@ int main() {
    glAttachShader(program, fragment_shader);
    glLinkProgram(program);
 
-   // each vertex now has a position and a color, 6 floats in total
+   // each vertex now has position + color, 6 floats total
    // clang-format off
    float vertices[] = {
    //  x      y      z      r     g     b
@@ -59,7 +58,6 @@ int main() {
    };
    // clang-format on
 
-   // vao and vbo, see 03_triangle
    unsigned int vao, vbo;
    glGenVertexArrays(1, &vao);
    glGenBuffers(1, &vbo);
@@ -68,25 +66,17 @@ int main() {
    glBindBuffer(GL_ARRAY_BUFFER, vbo);
    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-   // in memory our vertices now look like this
-   //
-   //   | x  y  z  r  g  b | x  y  z  r  g  b | x  y  z  r  g  b |
-   //   |    vertex 0      |    vertex 1      |    vertex 2      |
-   //
-   // so we need one glVertexAttribPointer call per attribute,
-   //    the stride is the same for both, the offset is where each one starts inside a vertex
+   // in memory: | x y z r g b | x y z r g b | x y z r g b |
+   // one glVertexAttribPointer per attribute, same stride, different offset
 
-   // position, location 0
-   //    3 floats; stride 6 floats; start from the beginning
+   // position, location 0: 3 floats, stride 6, offset 0
    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
    glEnableVertexAttribArray(0);
 
-   // color, location 1
-   //    3 floats; stride 6 floats; starts after the 3 position floats
+   // color, location 1: 3 floats, stride 6, offset 3
    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
    glEnableVertexAttribArray(1);
 
-   // main loop
    while (!glfwWindowShouldClose(window)) {
       glClearColor(0.17f, 0.22f, 0.24f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT);

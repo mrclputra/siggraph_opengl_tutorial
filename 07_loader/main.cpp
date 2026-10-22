@@ -9,11 +9,7 @@
 #include "shader.h"
 #include "loader.h"
 
-// obj files come from Wavefront Technologies in the late 80s for their animation software
-//    they later merged with Alias in 1995 and went on to make Maya
-// the format is just plain text, positions, normals, texture coords and faces, one per line
-//    materials live in a separate .mtl file, which we will skip here
-// it's old but very simple, open cube.obj in a text editor to see
+// obj files are plain text from Wavefront (late 80s) -- open cube.obj in a text editor to see
 
 int main() {
    glfwInit();
@@ -27,19 +23,14 @@ int main() {
 
    Shader shader(SHADER_DIR "shaders/vertex.glsl", SHADER_DIR "shaders/fragment.glsl");
 
-   // a 3d object has things in front of other things, so we need to enable depth testing
-   //    the gpu remembers how far away every pixel is, (this is called the depth buffer) and skips the pixels behind
-   //    without this, faces will just draw over each other in whatever order they are called
+   // 3d objects have things in front of other things, so we need depth testing
    glEnable(GL_DEPTH_TEST);
 
-   // instead of typing the vertices and indices by hand, we load them from a file
-   //    std::vector is an array that can grow, since we don't know the size until we read the file
-   //    just be VERY careful with loading the entire file into memory, especially if it is large!! try chunking -marcel
+   // std::vector since we don't know the size until we read the file
    std::vector<Vertex> vertices;
    std::vector<unsigned int> indices;
    loadObj(SHADER_DIR "cube.obj", vertices, indices);
 
-   // initialize buffers
    unsigned int vao, vbo, ebo;
    glGenVertexArrays(1, &vao);
    glGenBuffers(1, &vbo);
@@ -57,11 +48,10 @@ int main() {
 
    while (!glfwWindowShouldClose(window)) {
       glClearColor(0.17f, 0.22f, 0.24f, 1.0f);
-      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear the depth buffer too, every frame
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear depth buffer too every frame
 
       shader.bind();
 
-      // model, view, projection, see 06_transforms
       glm::mat4 model = glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
       glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
       glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1280.0f / 720.0f, 0.1f, 100.0f);

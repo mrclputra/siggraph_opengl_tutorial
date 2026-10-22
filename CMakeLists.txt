@@ -8,10 +8,9 @@ find_package(glad REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(glm REQUIRED)
 
-# every subfolder with a main.cpp becomes it's own executable
+# every subfolder with a main.cpp becomes its own executable
 file(GLOB children LIST_DIRECTORIES true "${CMAKE_SOURCE_DIR}/*")
 foreach(dir ${children})
-   # check
    if(NOT EXISTS "${dir}/main.cpp")
       continue()
    endif()
@@ -21,17 +20,13 @@ foreach(dir ${children})
    add_executable(${name} ${sources})
    target_link_libraries(${name} glad::glad glfw glm::glm)
 
-   # full path to this folder,
-   # so shaders and other files can be found no matter where the exe runs from
+   # full path to this folder so shaders and assets can be found regardless of where the exe runs from
    target_compile_definitions(${name} PRIVATE SHADER_DIR="${dir}/")
 
-   # bake the c++ standard library into the exe,
-   # otherwise it might load a different libstdc++-6.dll from PATH and crash
-   # please dont ask marcel about this he woudlnt know :)
+   # bake the c++ standard library into the exe so it doesn't pick up the wrong dll from PATH
    target_link_options(${name} PRIVATE -static-libstdc++ -static-libgcc)
 
-   # std::println needs these with mingw: stdc++exp has the windows console part of <print>,
-   # and lld links it without a wall of "duplicate section" warnings
+   # std::println needs stdc++exp on mingw; lld avoids "duplicate section" warnings when linking it
    target_link_libraries(${name} stdc++exp)
    target_link_options(${name} PRIVATE -fuse-ld=lld)
 endforeach()

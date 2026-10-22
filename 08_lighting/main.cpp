@@ -23,12 +23,10 @@ int main() {
 
    glEnable(GL_DEPTH_TEST);
 
-   // load
    std::vector<Vertex> vertices;
    std::vector<unsigned int> indices;
    loadObj(SHADER_DIR "dragon.obj", vertices, indices);
 
-   // initialize buffers
    unsigned int vao, vbo, ebo;
    glGenVertexArrays(1, &vao);
    glGenBuffers(1, &vbo);
@@ -41,9 +39,9 @@ int main() {
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
-   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, pos));  // position
+   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, pos));    // position
    glEnableVertexAttribArray(0);
-   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, normal));  // normal
+   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, normal)); // normal
    glEnableVertexAttribArray(1);
 
    while (!glfwWindowShouldClose(window)) {
@@ -52,7 +50,6 @@ int main() {
 
       shader.bind();
 
-      // model, view, projection, see 06_transforms
       glm::mat4 model = glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
       glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
       glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1280.0f / 720.0f, 0.1f, 100.0f);
@@ -61,8 +58,7 @@ int main() {
       shader.setMat4("view", view);
       shader.setMat4("projection", projection);
 
-      // the lighting needs to know where the light is and where we are looking from, both in world space
-      //    the camera is at z 3, since the view matrix moves the world -3
+      // camera is at z=3 (view moves world -3), light follows it like a headlight
       shader.setVec3("light_pos", glm::vec3(2.0f, 2.0f, 2.0f));
       shader.setVec3("view_pos", glm::vec3(0.0f, 0.0f, 3.0f));
 

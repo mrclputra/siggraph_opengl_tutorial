@@ -11,14 +11,14 @@ void framebufferSizeCallback(GLFWwindow *, int width, int height) {
    glViewport(0, 0, width, height);
 }
 
-// polling: we call this ourselves every frame to check the current state of the mouse
+// polling: we call this ourselves every frame to read the current mouse position
 void pollMouse(GLFWwindow *window) {
    double x, y;
    glfwGetCursorPos(window, &x, &y);  // in pixels, from the top left of the window
    // std::println("mouse: {}, {}", x, y);
 }
 
-// callback: glfw calls this once whenever a key is pressed, held or released
+// callback: glfw calls this once whenever a key is pressed, held, or released
 void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
    if (action != GLFW_PRESS) return;  // only react to the initial press
    if (key == GLFW_KEY_ESCAPE) glfwSetWindowShouldClose(window, true);
@@ -34,30 +34,26 @@ int main() {
       return 1;  // fail
    }
 
-   // opengl 3.3 core
    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-   // create the window and its opengl context
    GLFWwindow *window = glfwCreateWindow(1280, 720, "02_input", nullptr, nullptr);
    if (window == nullptr) {
       glfwTerminate();
-      return 1;
+      return 1;  // fail
    }
    glfwMakeContextCurrent(window);
 
-   // load opengl functions
    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
       std::println("failed to load OpenGL");
       glfwTerminate();
-      return 1;
+      return 1;  // fail
    }
 
    glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
    glfwSetKeyCallback(window, keyCallback);
 
-   // main loop
    while (!glfwWindowShouldClose(window)) {
       pollMouse(window);
 

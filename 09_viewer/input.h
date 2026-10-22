@@ -2,13 +2,12 @@
 
 #include <GLFW/glfw3.h>
 
-// keeps track of the keyboard and mouse, taken from caldera
-//    the callbacks from 02_input only save what happened, and the main loop reads it whenever it wants
+// tracks keyboard and mouse state; callbacks save the events, main loop reads them
 class Input {
  public:
    Input(GLFWwindow *window) {
-      // glfw callbacks can't be normal member functions, so we give glfw a pointer to this object
-      //    and get it back inside the callbacks with glfwGetWindowUserPointer
+      // glfw callbacks can't be member functions, so we store a pointer to this object
+      // and get it back inside the callbacks with glfwGetWindowUserPointer
       glfwSetWindowUserPointer(window, this);
       glfwSetKeyCallback(window, keyCallback);
       glfwSetCursorPosCallback(window, cursorPosCallback);
@@ -18,8 +17,7 @@ class Input {
       glfwGetCursorPos(window, &cursor_x, &cursor_y);
    }
 
-   // call once every frame, after reading the input
-   //    the movement adds up between frames, so it has to be reset
+   // call once per frame after reading input; deltas accumulate between frames so they need resetting
    void update() {
       cursor_dx = 0.0f;
       cursor_dy = 0.0f;

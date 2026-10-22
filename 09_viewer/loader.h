@@ -14,11 +14,8 @@ struct Vertex {
    glm::vec3 normal;
 };
 
-// reads an obj file, a more complete version of 08_lighting
-//    positions "v x y z"
-//    normals "vn x y z"
-//    faces "f" with any number of corners, each corner can be "1", "1/2", "1//3" or "1/2/3"
-//    texture coordinates and materials (colors) get skipped
+// reads an obj file: positions "v", normals "vn", faces "f" (any number of corners per face)
+// texture coordinates and materials are skipped
 bool loadObj(const std::string &path, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices) {
    std::ifstream file(path);
    if (!file) {
@@ -29,9 +26,8 @@ bool loadObj(const std::string &path, std::vector<Vertex> &vertices, std::vector
    std::vector<glm::vec3> positions;
    std::vector<glm::vec3> normals;
 
-   // in an obj a corner can pair any position with any normal, but opengl wants one index per vertex
-   //    so every new (position, normal) pair becomes its own vertex, and pairs we have seen before get reused
-   //    e.g. a cube corner touches 3 faces with 3 different normals, so it becomes 3 vertices
+   // obj can pair any position with any normal, but opengl wants one index per vertex
+   // so every unique (position, normal) pair becomes its own vertex; duplicates get reused
    std::map<std::pair<int, int>, unsigned int> seen;
 
    std::string line;
@@ -49,14 +45,13 @@ bool loadObj(const std::string &path, std::vector<Vertex> &vertices, std::vector
          ss >> normal.x >> normal.y >> normal.z;
          normals.push_back(normal);
       } else if (type == "f") {
-         // read all the corners of this face
          std::vector<unsigned int> face;
          std::string corner;
          while (ss >> corner) {
             int p = std::stoi(corner) - 1;  // obj counts from 1
-            int n = -1;                     // -1 means no normal
+            int n = -1;
 
-            // the normal index is the number after the last slash, if there are 2 slashes
+            // normal index is after the last slash, if there are 2 slashes
             size_t slash = corner.rfind('/');
             if (slash != std::string::npos && corner.find('/') != slash)
                n = std::stoi(corner.substr(slash + 1)) - 1;
@@ -65,18 +60,14 @@ bool loadObj(const std::string &path, std::vector<Vertex> &vertices, std::vector
             if (!seen.contains(key)) {
                Vertex vertex;
                vertex.pos = positions[p];
-               vertex.normal = glm::vec3(0.0f);
-               if (n >= 0)
-                  vertex.normal = normals[n];
-
+               vertex.normal = n >= 0 ? normals[n] : glm::vec3(0.0f);
                seen[key] = vertices.size();
                vertices.push_back(vertex);
             }
             face.push_back(seen[key]);
          }
 
-         // faces with more than 3 corners get split into triangles that all share the first corner
-         //    a quad 0 1 2 3 becomes 0 1 2 and 0 2 3
+         // fan triangulate: quad 0 1 2 3 becomes (0,1,2) and (0,2,3)
          for (size_t i = 1; i + 1 < face.size(); i++) {
             indices.push_back(face[0]);
             indices.push_back(face[i]);
@@ -85,9 +76,7 @@ bool loadObj(const std::string &path, std::vector<Vertex> &vertices, std::vector
       }
    }
 
-   // no normals in the file, so we make our own
-   //    every triangle adds its direction to its 3 corners, and after normalizing we get smooth shading
-   //    glm::cross() of two edges gives a vector pointing straight out of the triangle
+   // no normals in the file -- compute smooth ones from triangle geometry
    if (normals.empty()) {
       for (size_t i = 0; i < indices.size(); i += 3) {
          Vertex &a = vertices[indices[i]];
